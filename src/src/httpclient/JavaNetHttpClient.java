@@ -1,20 +1,20 @@
 package src.httpclient;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class JavaNetHttpClient {
 
-    public static void executeGet(String urlString) {
+    public static List<String> executeGet(String urlString) {
         System.out.println("===== HTTP GET Start =====");
+        List<String> list = new ArrayList<String>();
         try {
         	// Make URL instance
             URL url = new URL(urlString);
@@ -40,10 +40,7 @@ public class JavaNetHttpClient {
                         		num++;
                         	}
                         	if(num == 1) {
-                            	String str = getImagePath(trimed);
-                            	if(str != null) {
-                                   System.out.println(str);
-                            	}                        		
+                            	getImagePath(trimed, list);        		
                         	}
                         }
                     }
@@ -58,13 +55,16 @@ public class JavaNetHttpClient {
         }
 
         System.out.println("===== HTTP GET End =====");
+        return list;
     }
     
-    private static String getImagePath(String htmlLine) {
+    private static void getImagePath(String htmlLine, List<String> list) {
     	Boolean flg = Pattern.compile("<img.*user_images.*jpg").matcher(htmlLine).find();
     	if(flg) {
-        	return htmlLine.replaceAll("^.+<img src=\"", "").replaceAll("jpg.*", "jpg");
+    		String[] str = htmlLine.split("<img");
+    		for(int i = 1; i < str.length; i++) {
+    			list.add(str[i].replaceAll("^.*src=\"", "").replaceAll("jpg.*", "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
+    		}        	
     	}
-    	return null;
     }
 }
