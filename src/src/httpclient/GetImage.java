@@ -17,7 +17,7 @@ public class GetImage {
 		try {
 		    URI uri =new URI(imageUrl);
 		    URL url=uri.toURL();
-	        System.out.println("===== Connect" + imageUrl + " =====");
+	        System.out.println("===== Connect " + imageUrl + " =====");
 		    URLConnection urlcon =url.openConnection();
 		    InputStream fileIS =urlcon.getInputStream();
 		    File saveFile = new File(path + "/" + imageUrl.replaceAll("^.*/([^/]+)$", "$1"));

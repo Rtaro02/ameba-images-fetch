@@ -24,15 +24,16 @@ public class JavaNetHttpClient {
             try {
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
+    	        System.out.println("===== Connect " + urlString + " =====");
 
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    try (InputStreamReader isr = new InputStreamReader(connection.getInputStream(),
-                                                                       StandardCharsets.UTF_8);
-                         BufferedReader reader = new BufferedReader(isr)) {
+                    try (InputStreamReader isr = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+                        BufferedReader reader = new BufferedReader(isr)) {
                         String line;
                         Integer num = 0;
                         while ((line = reader.readLine()) != null) {
                         	String trimed = line.trim();
+                        	fetchNextUrl(trimed, list);
                         	if (Pattern.compile("^<article").matcher(trimed).find()) {
                         		num++;
                         	}
@@ -59,12 +60,21 @@ public class JavaNetHttpClient {
     }
     
     private static void getImagePath(String htmlLine, List<String> list) {
-    	Boolean flg = Pattern.compile("<img.*user_images.*jpg").matcher(htmlLine).find();
-    	if(flg) {
+    	// Imageタグ、user_images(メンバーが写っている可能性が高いurl)が入っているか、jpgか
+    	if(Pattern.compile("<img.*user_images.*jpg").matcher(htmlLine).find()) {
     		String[] str = htmlLine.split("<img");
     		for(int i = 1; i < str.length; i++) {
+    			// トリミング。txxx_xxxの画像は小さいので、大きい画像に取り替える
     			list.add(str[i].replaceAll("^.*src=\"", "").replaceAll("jpg.*", "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
     		}        	
+    	}
+    }
+    
+    private static void fetchNextUrl(String str, List<String> list) {
+    	// 次のページのURLが入っているタグ
+    	if(Pattern.compile("skin-pagingNext skin-btnPaging ga-pagingTopNextTop").matcher(str).find()) {
+            System.out.println("===== aaa =====");
+    			list.add(str.replaceAll("^.*href=\"([^\"]+)\".*", "$1"));
     	}
     }
 }
