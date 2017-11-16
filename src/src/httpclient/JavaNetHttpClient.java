@@ -65,16 +65,25 @@ public class JavaNetHttpClient {
     		String[] str = htmlLine.split("<img");
     		for(int i = 1; i < str.length; i++) {
     			// トリミング。txxx_xxxの画像は小さいので、大きい画像に取り替える
-    			list.add(str[i].replaceAll("^.*src=\"", "").replaceAll("jpg.*", "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
+    			System.out.println(str[i]);
+    			System.out.println("変換前↑変換後↓");
+    			System.out.println(str[i].replaceAll("^.*src=\"", "").replaceAll("jpg.*$", "jpg"));
+    			list.add(str[i].replaceAll("^.*src=\"", "").replaceAll("jpg.*$", "jpg").replaceAll("\\?.*$", "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
     		}        	
     	}
     }
     
     private static void fetchNextUrl(String str, List<String> list) {
     	// 次のページのURLが入っているタグ
-    	if(Pattern.compile("skin-pagingNext skin-btnPaging ga-pagingTopNextTop").matcher(str).find()) {
-            System.out.println("===== aaa =====");
-    			list.add(str.replaceAll("^.*href=\"([^\"]+)\".*", "$1"));
+    	if(Pattern.compile("skin-pagingNext.*NextTop").matcher(str).find()) {
+    		String url = str.replaceAll("^.*href=\"([^\"]+)\".*", "$1");
+    		// https:が付いているか
+    		if(url.startsWith("//")) {
+    			list.add("https:" + url);    			
+    		} else {
+    			//そのまま
+    			list.add(url);
+    		}
     	}
     }
 }

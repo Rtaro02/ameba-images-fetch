@@ -9,18 +9,26 @@ public class SaveImages {
 
 	public static void saveImages(String initialUrl, String path, Integer num) {
 		String url = initialUrl;
-		for(int i=0; i < num; i++) {
+		Integer i = 0;
+		while(i<num && !url.equals("")) {
 			// nextUrl
 			url = fetchImages(url, path);
 			System.out.println("===== NEXT URL " + url + "=====");
+			i++;			
 		}
+		System.out.println("===== END !!=====");
 	}
 	
 	private static String fetchImages(String url, String path) {
 		List<String> list = JavaNetHttpClient.executeGet(url);
-		for(int i=1; i<list.size(); i++) {
-			GetImage.fetch(list.get(i), path);
+		String str = "";
+		for(int i=0; i<list.size(); i++) {
+			if (list.get(i).endsWith("jpg")) {
+				GetImage.fetch(list.get(i), path);
+			} else {
+				str = list.get(i);
+			}
 		}
-		return list.get(0);
+		return str;
 	} 
 }
