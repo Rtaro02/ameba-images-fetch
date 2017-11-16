@@ -65,18 +65,17 @@ public class JavaNetHttpClient {
     		String[] str = htmlLine.split("<img");
     		for(int i = 1; i < str.length; i++) {
     			// トリミング。txxx_xxxの画像は小さいので、大きい画像に取り替える
-    			System.out.println(str[i]);
-    			System.out.println("変換前↑変換後↓");
-    			System.out.println(str[i].replaceAll("^.*src=\"", "").replaceAll("jpg.*$", "jpg"));
-    			list.add(str[i].replaceAll("^.*src=\"", "").replaceAll("jpg.*$", "jpg").replaceAll("\\?.*$", "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
+    			// jpgをsplitで実装しているのは、正規表現だとNGな場面が発生したため（原因は不明↓のページ）
+    			// https://ameblo.jp/angerme-ss-shin/entry-12328153556.html
+    			list.add((str[i].replaceAll("^.*src=\"", "").split("jpg")[0] + "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
     		}        	
     	}
     }
     
     private static void fetchNextUrl(String str, List<String> list) {
     	// 次のページのURLが入っているタグ
-    	if(Pattern.compile("skin-pagingNext.*NextTop").matcher(str).find()) {
-    		String url = str.replaceAll("^.*href=\"([^\"]+)\".*", "$1");
+    	if(Pattern.compile("pagingNext").matcher(str).find()) {
+    		String url = str.replaceAll("^.*href=\"([^\"]+.html)\".*", "$1");
     		// https:が付いているか
     		if(url.startsWith("//")) {
     			list.add("https:" + url);    			
