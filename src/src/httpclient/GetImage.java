@@ -12,7 +12,7 @@ import java.net.URLConnection;
 
 public class GetImage {
 
-    public static void fetch(String imageUrl){
+    public static void fetch(String imageUrl, String path){
         System.out.println("===== GET IMAGE START =====");
 		try {
 		    URI uri =new URI(imageUrl);
@@ -20,7 +20,7 @@ public class GetImage {
 	        System.out.println("===== Connect" + imageUrl + " =====");
 		    URLConnection urlcon =url.openConnection();
 		    InputStream fileIS =urlcon.getInputStream();
-		    File saveFile = new File(imageUrl.replaceAll("^.*/([^/]+)$", "$1"));
+		    File saveFile = new File(path + "/" + imageUrl.replaceAll("^.*/([^/]+)$", "$1"));
 		    FileOutputStream fileOS = new FileOutputStream(saveFile);
 		    int c;
 		    while((c =fileIS.read()) != -1) fileOS.write((byte) c);

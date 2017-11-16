@@ -7,9 +7,11 @@ import src.httpclient.JavaNetHttpClient;
 
 public class Main {
 	public static void main(String args[]) {
-		List<String> list = JavaNetHttpClient.executeGet("https://ameblo.jp/c-ute-official/entry-12283798139.html");
+		String url = args[0];
+		String path = args[1]; 
+		List<String> list = JavaNetHttpClient.executeGet(url);
 		for(int i=0; i<list.size(); i++) {
-			GetImage.fetch(list.get(i));
+			GetImage.fetch(list.get(i), path);
 		}
 	}
 }
