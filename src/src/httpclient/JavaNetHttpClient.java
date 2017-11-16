@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JavaNetHttpClient {
 
@@ -28,8 +30,21 @@ public class JavaNetHttpClient {
                                                                        StandardCharsets.UTF_8);
                          BufferedReader reader = new BufferedReader(isr)) {
                         String line;
+                        Integer num = 0;
                         while ((line = reader.readLine()) != null) {
-                            System.out.println(line);
+                        	String trimed = line.trim();
+                        	if (Pattern.compile("^<article").matcher(trimed).find()) {
+                        		num++;
+                        	}
+                        	if (Pattern.compile("^</article").matcher(trimed).find()) {
+                        		num++;
+                        	}
+                        	if(num == 1) {
+                            	String str = getImagePath(trimed);
+                            	if(str != null) {
+                                   System.out.println(str);
+                            	}                        		
+                        	}
                         }
                     }
                 }
@@ -43,5 +58,13 @@ public class JavaNetHttpClient {
         }
 
         System.out.println("===== HTTP GET End =====");
+    }
+    
+    private static String getImagePath(String htmlLine) {
+    	Boolean flg = Pattern.compile("<img.*user_images.*jpg").matcher(htmlLine).find();
+    	if(flg) {
+        	return htmlLine.replaceAll("^.+<img src=\"", "").replaceAll("jpg.*", "jpg");
+    	}
+    	return null;
     }
 }
