@@ -16,7 +16,7 @@ public class JavaNetHttpClient {
         System.out.println("===== HTTP GET Start =====");
         List<String> list = new ArrayList<String>();
         try {
-        	// Make URL instance
+            // Make URL instance
             URL url = new URL(urlString);
 
             HttpURLConnection connection = null;
@@ -24,7 +24,7 @@ public class JavaNetHttpClient {
             try {
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
-    	        System.out.println("===== Connect " + urlString + " =====");
+                System.out.println("===== Connect " + urlString + " =====");
 
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     try (InputStreamReader isr = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
@@ -32,17 +32,17 @@ public class JavaNetHttpClient {
                         String line;
                         Integer num = 0;
                         while ((line = reader.readLine()) != null) {
-                        	String trimed = line.trim();
-                        	fetchNextUrl(trimed, list);
-                        	if (Pattern.compile("^<article").matcher(trimed).find()) {
-                        		num++;
-                        	}
-                        	if (Pattern.compile("^</article").matcher(trimed).find()) {
-                        		num++;
-                        	}
-                        	if(num == 1) {
-                            	getImagePath(trimed, list);        		
-                        	}
+                            String trimed = line.trim();
+                            fetchNextUrl(trimed, list);
+                            if (Pattern.compile("^<article").matcher(trimed).find()) {
+                                num++;
+                            }
+                            if (Pattern.compile("^</article").matcher(trimed).find()) {
+                                num++;
+                            }
+                            if(num == 1) {
+                                getImagePath(trimed, list);
+                            }
                         }
                     }
                 }
@@ -58,31 +58,31 @@ public class JavaNetHttpClient {
         System.out.println("===== HTTP GET End =====");
         return list;
     }
-    
+
     private static void getImagePath(String htmlLine, List<String> list) {
-    	// Imageƒ^ƒOAuser_images(ƒƒ“ƒo[‚ªÊ‚Á‚Ä‚¢‚é‰Â”\«‚ª‚‚¢url)‚ª“ü‚Á‚Ä‚¢‚é‚©Ajpg‚©
-    	if(Pattern.compile("<img.*user_images.*jpg").matcher(htmlLine).find()) {
-    		String[] str = htmlLine.split("<img");
-    		for(int i = 1; i < str.length; i++) {
-    			// ƒgƒŠƒ~ƒ“ƒOBtxxx_xxx‚Ì‰æ‘œ‚Í¬‚³‚¢‚Ì‚ÅA‘å‚«‚¢‰æ‘œ‚Éæ‚è‘Ö‚¦‚é
-    			// jpg‚ğsplit‚ÅÀ‘•‚µ‚Ä‚¢‚é‚Ì‚ÍA³‹K•\Œ»‚¾‚ÆNG‚Èê–Ê‚ª”­¶‚µ‚½‚½‚ßiŒ´ˆö‚Í•s–¾«‚Ìƒy[ƒWj
-    			// https://ameblo.jp/angerme-ss-shin/entry-12328153556.html
-    			list.add((str[i].replaceAll("^.*src=\"", "").split("jpg")[0] + "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
-    		}        	
-    	}
+        // Imageã‚¿ã‚°ã€user_images(ãƒ¡ãƒ³ãƒãƒ¼ãŒå†™ã£ã¦ã„ã‚‹å¯èƒ½æ€§ãŒé«˜ã„url)ãŒå…¥ã£ã¦ã„ã‚‹ã‹ã€jpgã‹
+        if(Pattern.compile("<img.*user_images.*jpg").matcher(htmlLine).find()) {
+            String[] str = htmlLine.split("<img");
+            for(int i = 1; i < str.length; i++) {
+                // ãƒˆãƒªãƒŸãƒ³ã‚°ã€‚txxx_xxxã®ç”»åƒã¯å°ã•ã„ã®ã§ã€å¤§ãã„ç”»åƒã«å–ã‚Šæ›¿ãˆã‚‹
+                // jpgã‚’splitã§å®Ÿè£…ã—ã¦ã„ã‚‹ã®ã¯ã€æ­£è¦è¡¨ç¾ã ã¨NGãªå ´é¢ãŒç™ºç”Ÿã—ãŸãŸã‚ï¼ˆåŸå› ã¯ä¸æ˜â†“ã®ãƒšãƒ¼ã‚¸ï¼‰
+                // https://ameblo.jp/angerme-ss-shin/entry-12328153556.html
+                list.add((str[i].replaceAll("^.*src=\"", "").split("jpg")[0] + "jpg").replaceAll("/t\\d+_(\\d+\\.jpg)$", "/o$1"));
+            }
+        }
     }
-    
+
     private static void fetchNextUrl(String str, List<String> list) {
-    	// Ÿ‚Ìƒy[ƒW‚ÌURL‚ª“ü‚Á‚Ä‚¢‚éƒ^ƒO
-    	if(Pattern.compile("pagingNext").matcher(str).find()) {
-    		String url = str.replaceAll("^.*href=\"([^\"]+.html)\".*", "$1");
-    		// https:‚ª•t‚¢‚Ä‚¢‚é‚©
-    		if(url.startsWith("//")) {
-    			list.add("https:" + url);    			
-    		} else {
-    			//‚»‚Ì‚Ü‚Ü
-    			list.add(url);
-    		}
-    	}
+        // æ¬¡ã®ãƒšãƒ¼ã‚¸ã®URLãŒå…¥ã£ã¦ã„ã‚‹ã‚¿ã‚°
+        if(Pattern.compile("pagingNext").matcher(str).find()) {
+            String url = str.replaceAll("^.*href=\"([^\"]+.html)\".*", "$1");
+            // https:ãŒä»˜ã„ã¦ã„ã‚‹ã‹
+            if(url.startsWith("//")) {
+                list.add("https:" + url);
+            } else {
+                //ãã®ã¾ã¾
+                list.add(url);
+            }
+        }
     }
 }

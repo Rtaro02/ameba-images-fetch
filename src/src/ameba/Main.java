@@ -1,22 +1,22 @@
 package src.ameba;
 
 public class Main {
-	/**
-	 * Àsƒƒ\ƒbƒh
-	 * @param args
-	 * ‘æ1ˆø”: URLi•K{j
-	 * ‘æ2ˆø”: ‰æ‘œ‚Ì•Û‘¶pathi•K{j
-	 * ‘æ3ˆø”: •Û‘¶‹L–”i”CˆÓj
-	 */
-	public static void main(String args[]) {
-		String url = args[0];
-		String path = args[1];
-		// ‹L–”BƒfƒtƒHƒ‹ƒg‚Í\•ª‘å‚«‚¢’lB
-		Integer num =  10000000;
-		if(args.length > 2) {
-			// ˆø”w’è‚³‚ê‚½ê‡‚ÍA‚»‚ê‚ğİ’è
-			num = Integer.parseInt(args[2]);			
-		}
-		SaveImages.saveImages(url, path, num);
-	}
+    /**
+     * å®Ÿè¡Œãƒ¡ã‚½ãƒƒãƒ‰
+     * @param args
+     * ç¬¬1å¼•æ•°: URLï¼ˆå¿…é ˆï¼‰
+     * ç¬¬2å¼•æ•°: ç”»åƒã®ä¿å­˜pathï¼ˆå¿…é ˆï¼‰
+     * ç¬¬3å¼•æ•°: ä¿å­˜è¨˜äº‹æ•°ï¼ˆä»»æ„ï¼‰
+     */
+    public static void main(String args[]) {
+        String url = args[0];
+        String path = args[1];
+        // è¨˜äº‹æ•°ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ååˆ†å¤§ãã„å€¤ã€‚
+        Integer num =  10000000;
+        if(args.length > 2) {
+            // å¼•æ•°æŒ‡å®šã•ã‚ŒãŸå ´åˆã¯ã€ãã‚Œã‚’è¨­å®š
+            num = Integer.parseInt(args[2]);
+        }
+        SaveImages.saveImages(url, path, num);
+    }
 }
