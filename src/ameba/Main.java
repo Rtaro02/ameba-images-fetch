@@ -17,6 +17,7 @@ public class Main {
             // 引数指定された場合は、それを設定
             num = Integer.parseInt(args[2]);
         }
-        SaveImages.saveImages(url, path, num);
+        SaveImages saveImages = SaveImages.getInstance();
+        saveImages.excecute(url, path, num);
     }
 }

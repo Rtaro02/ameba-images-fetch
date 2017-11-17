@@ -11,8 +11,16 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class GetImage {
+	private static GetImage singleton = new GetImage();
+	
+	private GetImage() {
+	}
+	
+	public static GetImage getInstance() {
+		return singleton;
+	}
 
-    public static void fetch(String imageUrl, String path){
+    public void fetch(String imageUrl, String path){
         System.out.println("===== GET IMAGE START =====");
         try {
             URI uri =new URI(imageUrl);

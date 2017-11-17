@@ -6,8 +6,16 @@ import httpclient.GetImage;
 import httpclient.JavaNetHttpClient;
 
 public class SaveImages {
+	private static SaveImages singleton = new SaveImages();
+	
+	private SaveImages() {
+	}
+	
+	public static SaveImages getInstance() {
+		return singleton;
+	}
 
-    public static void saveImages(String initialUrl, String path, Integer num) {
+    public void excecute(String initialUrl, String path, Integer num) {
         String url = initialUrl;
         Integer i = 0;
         while(i<num && !url.equals("")) {
@@ -19,12 +27,13 @@ public class SaveImages {
         System.out.println("===== END !!=====");
     }
 
-    private static String fetchImages(String url, String path) {
+    private String fetchImages(String url, String path) {
         List<String> list = JavaNetHttpClient.executeGet(url);
         String str = "";
+        GetImage getImages = GetImage.getInstance();
         for(int i=0; i<list.size(); i++) {
             if (list.get(i).endsWith("jpg")) {
-                GetImage.fetch(list.get(i), path);
+            	getImages.fetch(list.get(i), path);
             } else {
                 str = list.get(i);
             }
