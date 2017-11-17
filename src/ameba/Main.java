@@ -1,4 +1,4 @@
-package src.ameba;
+package ameba;
 
 public class Main {
     /**

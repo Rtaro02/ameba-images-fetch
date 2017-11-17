@@ -1,9 +1,9 @@
-package src.ameba;
+package ameba;
 
 import java.util.List;
 
-import src.httpclient.GetImage;
-import src.httpclient.JavaNetHttpClient;
+import httpclient.GetImage;
+import httpclient.JavaNetHttpClient;
 
 public class SaveImages {
 

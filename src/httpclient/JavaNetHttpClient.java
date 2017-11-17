@@ -1,4 +1,4 @@
-package src.httpclient;
+package httpclient;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
