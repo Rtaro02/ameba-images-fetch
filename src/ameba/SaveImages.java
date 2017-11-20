@@ -14,7 +14,6 @@ import httpclient.GetImage;
 import httpclient.JavaNetHttpClient;
 
 public class SaveImages {
-	final String FILE_NAME = "/url";
 	private static SaveImages singleton = new SaveImages();
 	
 	private SaveImages() {
@@ -27,9 +26,9 @@ public class SaveImages {
     public void excecute(String initialUrl, String path, Integer upperLimit) {
         String url = JavaNetHttpClient.fetchInitialURL(initialUrl);
         System.out.println("===== Initial URL is " + url + " =====");
-        String lastURL = readURL(path);
+        String lastURL = readURL(path, initialUrl);
         // URLを書き込む
-        writeURL(url, path);
+        writeURL(url, path, initialUrl);
         Integer i = 0;
         while(i<upperLimit && isNotEndUrl(url) && isPriviousFetchURL(url, lastURL)) {
             // nextUrl
@@ -78,8 +77,8 @@ public class SaveImages {
      * @param url
      * @return
      */
-    private String readURL(String path) {
-    	File file = new File(path + FILE_NAME);
+    private String readURL(String path, String init) {
+    	File file = new File(path + "/" + init.replaceAll("^.*/([^/]+)/[^/]*$", "$1"));
     	String lastURL = "";
     	try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -103,8 +102,8 @@ public class SaveImages {
      * @param url
      * @return
      */
-    private void writeURL(String url, String path) {
-    	File file = new File(path + FILE_NAME);
+    private void writeURL(String url, String path, String init) {
+    	File file = new File(path + "/" + init.replaceAll("^.*/([^/]+)/[^/]*$", "$1"));
     	PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
