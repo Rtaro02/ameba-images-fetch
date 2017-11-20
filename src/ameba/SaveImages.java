@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import httpclient.GetImage;
 import httpclient.JavaNetHttpClient;
@@ -78,7 +79,7 @@ public class SaveImages {
      * @return
      */
     private String readURL(String path, String init) {
-    	File file = new File(path + "/" + init.replaceAll("^.*/([^/]+)/[^/]*$", "$1"));
+    	File file = new File(path + "/" + getFineName(init));
     	String lastURL = "";
     	try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -103,7 +104,7 @@ public class SaveImages {
      * @return
      */
     private void writeURL(String url, String path, String init) {
-    	File file = new File(path + "/" + init.replaceAll("^.*/([^/]+)/[^/]*$", "$1"));
+    	File file = new File(path + "/" + getFineName(init));
     	PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
@@ -114,5 +115,13 @@ public class SaveImages {
 			// 失敗したらなにもしない
 		}
     	System.out.println("===== " + url + " is writed!! =====");
+    }
+    
+    private String getFineName(String url) {
+    	if(url.endsWith("html") || url.endsWith("/")) {
+    		return url.replaceAll("^.*/([^/]+)/[^/]*$", "$1");
+    	} else {
+    		return url.replaceAll("^.*/([^/]+)$", "$1");
+    	}
     }
 }
