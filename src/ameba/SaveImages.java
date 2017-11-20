@@ -25,23 +25,19 @@ public class SaveImages {
 	}
 
     public void excecute(String initialUrl, String path, Integer upperLimit) {
-        String url = initialUrl;
-        String lastURL = readURL(url, path);
+        String url = JavaNetHttpClient.fetchInitialURL(initialUrl);
+        System.out.println("===== Initial URL is " + url + " =====");
+        String lastURL = readURL(path);
+        // URLを書き込む
+        writeURL(url, path);
         Integer i = 0;
-        // 次回用に保存するURL
-        String saveURL = "";
         while(i<upperLimit && isNotEndUrl(url) && isPriviousFetchURL(url, lastURL)) {
             // nextUrl
             url = fetchImages(url, path);
             System.out.println("===== NEXT URL " + url + " =====");
             // 初回のみURL保持
-            if(i ==0) {
-            	saveURL = url;
-            }
             i++;
         }
-        // URLを書き込む
-        writeURL(saveURL, path);
         System.out.println("===== END !! =====");
     }
     
@@ -82,7 +78,7 @@ public class SaveImages {
      * @param url
      * @return
      */
-    private String readURL(String url, String path) {
+    private String readURL(String path) {
     	File file = new File(path + FILE_NAME);
     	String lastURL = "";
     	try {
