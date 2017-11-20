@@ -57,7 +57,7 @@ public class JavaNetHttpClient {
 
         System.out.println("===== HTTP GET End =====");
         return list;
-    }
+    } 
 
     private static void getImagePath(String htmlLine, List<String> list) {
         // Imageタグ、user_images(メンバーが写っている可能性が高いurl)が入っているか、jpgか
