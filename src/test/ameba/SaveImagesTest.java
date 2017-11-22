@@ -18,9 +18,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import ameba.SaveImages;
-import httpclient.GetImage;
-import httpclient.JavaNetHttpClient;
+import main.ameba.SaveImages;
+import main.httpclient.GetImage;
+import main.httpclient.JavaNetHttpClient;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;

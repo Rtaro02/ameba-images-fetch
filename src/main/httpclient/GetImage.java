@@ -1,4 +1,4 @@
-package httpclient;
+package main.httpclient;
 
 import java.io.File;
 import java.io.FileOutputStream;

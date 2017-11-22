@@ -1,4 +1,4 @@
-package ameba;
+package main.ameba;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,8 +11,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import httpclient.GetImage;
-import httpclient.JavaNetHttpClient;
+import main.httpclient.GetImage;
+import main.httpclient.JavaNetHttpClient;
 
 public class SaveImages {
 	private static SaveImages singleton = new SaveImages();
