@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class JavaNetHttpClient {
 
     public static String fetchInitialURL(String urlString) {
-    	// htmlパスでない場合は、そのままURLを利用する
+    	// htmlパスの場合は、そのままURLを利用する
     	if(urlString.endsWith("html")) {
     		return urlString;
     	}
@@ -56,7 +56,6 @@ public class JavaNetHttpClient {
                 num++;
             }
             if(num == 1) {
-                // Imageタグ、user_images(メンバーが写っている可能性が高いurl)が入っているか、jpgか
             	String reg = "^.*entryTitle.*href=\"(https://[^\"]+)\".*$";
                 if(Pattern.compile(reg).matcher(trimed).find()) {
                     str = trimed.replaceAll(reg, "$1");
