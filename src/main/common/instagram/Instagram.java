@@ -1,4 +1,4 @@
-package main.ameba;
+package main.common.instagram;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,28 +10,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import main.httpclient.FetchAndSaveImage;
+import main.common.ameba.Ameba;
+import main.common.util.FetchAndSaveImage;
 import main.httpclient.JavaNetHttpClient;
 
-public class SaveImages {
-    private static SaveImages singleton = new SaveImages();
+public class Instagram {
 
-    private SaveImages() {
+    private static Instagram singleton = new Instagram();
+
+    private Instagram() {
     }
 
-    public static SaveImages getInstance() {
+    public static Instagram getInstance() {
         return singleton;
     }
 
-    public void excecute(String initialUrl, String path, Integer upperLimit) {
-        // amebaの場合実行
-        amebaExecute(initialUrl, path, upperLimit);
-    }
-
-    private void amebaExecute(String initialUrl, String path, Integer upperLimit) {
-        JavaNetHttpClient javaNetHttpClient = JavaNetHttpClient.getInstance();
-        String url = javaNetHttpClient.fetchInitialURL(initialUrl);
+    public void amebaExecute(String initialUrl, String path, Integer upperLimit) {
+        // インスタグラムの場合は、initialのURLをそのまま流用する
+        String url = initialUrl;
         System.out.println("===== Initial URL is " + url + " =====");
+
         String lastURL = readURL(path, initialUrl);
         // URLを書き込む
         writeURL(url, path, initialUrl);
@@ -129,4 +127,5 @@ public class SaveImages {
             return url.replaceAll("^.*/([^/]+)$", "$1");
         }
     }
+
 }

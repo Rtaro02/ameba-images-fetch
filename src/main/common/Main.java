@@ -1,4 +1,4 @@
-package main.ameba;
+package main.common;
 
 public class Main {
     /**
