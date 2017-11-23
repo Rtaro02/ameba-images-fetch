@@ -9,9 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import main.httpclient.GetImage;
+import main.httpclient.FetchAndSaveImage;
 import main.httpclient.JavaNetHttpClient;
 
 public class SaveImages {
@@ -25,13 +24,14 @@ public class SaveImages {
 	}
 
     public void excecute(String initialUrl, String path, Integer upperLimit) {
-        String url = JavaNetHttpClient.fetchInitialURL(initialUrl);
+    	JavaNetHttpClient javaNetHttpClient = JavaNetHttpClient.getInstance();
+        String url = javaNetHttpClient.fetchInitialURL(initialUrl);
         System.out.println("===== Initial URL is " + url + " =====");
         String lastURL = readURL(path, initialUrl);
         // URLを書き込む
         writeURL(url, path, initialUrl);
         Integer i = 0;
-        while(i<upperLimit && isNotEndUrl(url) && isPriviousFetchURL(url, lastURL)) {
+        while(i<upperLimit && isNotEndPage(url) && isPriviousFetchURL(url, lastURL)) {
             // nextUrl
             url = fetchImages(url, path);
             System.out.println("===== NEXT URL " + url + " =====");
@@ -46,7 +46,7 @@ public class SaveImages {
      * @param url
      * @return
      */
-    private boolean isNotEndUrl(String url) {
+    private boolean isNotEndPage(String url) {
     	return !url.equals("");
     }
     
@@ -60,12 +60,12 @@ public class SaveImages {
     }
 
     private String fetchImages(String url, String path) {
-        List<String> list = JavaNetHttpClient.executeGet(url);
+        List<String> list = JavaNetHttpClient.getInstance().executeGet(url);
         String str = "";
-        GetImage getImages = GetImage.getInstance();
+        FetchAndSaveImage FetchAndSaveImages = FetchAndSaveImage.getInstance();
         for(int i=0; i<list.size(); i++) {
             if (list.get(i).endsWith("jpg")) {
-            	getImages.fetch(list.get(i), path);
+            	FetchAndSaveImages.fetch(list.get(i), path);
             } else {
                 str = list.get(i);
             }

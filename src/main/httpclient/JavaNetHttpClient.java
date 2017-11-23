@@ -11,8 +11,16 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class JavaNetHttpClient {
+	private static JavaNetHttpClient singleton = new JavaNetHttpClient();
+	
+	private JavaNetHttpClient() {
+	}
+	
+	public static JavaNetHttpClient getInstance() {
+		return singleton;
+	}
 
-    public static String fetchInitialURL(String urlString) {
+    public String fetchInitialURL(String urlString) {
     	// htmlパスの場合は、そのままURLを利用する
     	if(urlString.endsWith("html")) {
     		return urlString;
@@ -29,7 +37,7 @@ public class JavaNetHttpClient {
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     try (InputStreamReader isr = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
                         BufferedReader reader = new BufferedReader(isr)) {
-                    	initialUrl = getInitialPath(initialUrl, reader);
+                    	initialUrl = getInitialPath(reader);
                     }
                 }
             } finally {
@@ -43,7 +51,7 @@ public class JavaNetHttpClient {
         return initialUrl;
     } 
 
-    private static String getInitialPath(String url, BufferedReader reader) throws IOException {
+    private String getInitialPath(BufferedReader reader) throws IOException {
         String line;
         Integer num = 0;
         String str = "";
@@ -65,7 +73,7 @@ public class JavaNetHttpClient {
         return str;
     }
 
-    public static List<String> executeGet(String urlString) {
+    public List<String> executeGet(String urlString) {
         System.out.println("===== HTTP GET Start =====");
         List<String> list = new ArrayList<String>();
         try {
@@ -94,7 +102,7 @@ public class JavaNetHttpClient {
         return list;
     }
 
-    private static void getImagePath(List<String> list, BufferedReader reader) throws IOException {
+    private void getImagePath(List<String> list, BufferedReader reader) throws IOException {
         String line;
         Integer num = 0;
         while ((line = reader.readLine()) != null) {
@@ -121,7 +129,7 @@ public class JavaNetHttpClient {
         }
     }
 
-    private static void fetchNextUrl(String str, List<String> list) {
+    private void fetchNextUrl(String str, List<String> list) {
         // 次のページのURLが入っているタグ
         if(Pattern.compile("pagingNext").matcher(str).find()) {
             String url = str.replaceAll("^.*href=\"([^\"]+.html)\".*", "$1");
