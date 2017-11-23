@@ -11,18 +11,18 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class FetchAndSaveImage {
-	private static FetchAndSaveImage singleton = new FetchAndSaveImage();
-	
-	private FetchAndSaveImage() {
-	}
-	
-	public static FetchAndSaveImage getInstance() {
-		return singleton;
-	}
+    private static FetchAndSaveImage singleton = new FetchAndSaveImage();
 
-	/**
-	 * 画像を保存する
-	 */
+    private FetchAndSaveImage() {
+    }
+
+    public static FetchAndSaveImage getInstance() {
+        return singleton;
+    }
+
+    /**
+     * 画像を保存する
+     */
     public void fetch(String imageUrl, String path){
         System.out.println("===== GET IMAGE START =====");
         try {

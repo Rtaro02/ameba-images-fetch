@@ -11,21 +11,21 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class JavaNetHttpClient {
-	private static JavaNetHttpClient singleton = new JavaNetHttpClient();
-	
-	private JavaNetHttpClient() {
-	}
-	
-	public static JavaNetHttpClient getInstance() {
-		return singleton;
-	}
+    private static JavaNetHttpClient singleton = new JavaNetHttpClient();
+
+    private JavaNetHttpClient() {
+    }
+
+    public static JavaNetHttpClient getInstance() {
+        return singleton;
+    }
 
     public String fetchInitialURL(String urlString) {
-    	// htmlパスの場合は、そのままURLを利用する
-    	if(urlString.endsWith("html")) {
-    		return urlString;
-    	}
-    	String initialUrl = "";
+        // htmlパスの場合は、そのままURLを利用する
+        if(urlString.endsWith("html")) {
+            return urlString;
+        }
+        String initialUrl = "";
         try {
             // Make URL instance
             URL url = new URL(urlString);
@@ -37,7 +37,7 @@ public class JavaNetHttpClient {
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     try (InputStreamReader isr = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
                         BufferedReader reader = new BufferedReader(isr)) {
-                    	initialUrl = getInitialPath(reader);
+                        initialUrl = getInitialPath(reader);
                     }
                 }
             } finally {
@@ -49,7 +49,7 @@ public class JavaNetHttpClient {
             e.printStackTrace();
         }
         return initialUrl;
-    } 
+    }
 
     private String getInitialPath(BufferedReader reader) throws IOException {
         String line;
@@ -64,7 +64,7 @@ public class JavaNetHttpClient {
                 num++;
             }
             if(num == 1) {
-            	String reg = "^.*entryTitle.*href=\"(https://[^\"]+)\".*$";
+                String reg = "^.*entryTitle.*href=\"(https://[^\"]+)\".*$";
                 if(Pattern.compile(reg).matcher(trimed).find()) {
                     str = trimed.replaceAll(reg, "$1");
                 }
@@ -87,7 +87,7 @@ public class JavaNetHttpClient {
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     try (InputStreamReader isr = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
                         BufferedReader reader = new BufferedReader(isr)) {
-                    	getImagePath(list, reader);
+                        getImagePath(list, reader);
                     }
                 }
             } finally {
