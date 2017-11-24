@@ -1,16 +1,9 @@
 package main.common.ameba;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import main.common.util.FetchAndSaveImage;
+import main.common.util.FileIO;
 import main.httpclient.JavaNetHttpClient;
 
 public class Ameba {
@@ -25,12 +18,16 @@ public class Ameba {
     }
 
     public void amebaExecute(String initialUrl, String path, Integer upperLimit) {
+        // http通信用
         JavaNetHttpClient javaNetHttpClient = JavaNetHttpClient.getInstance();
+        // IO用
+        FileIO fileIO = FileIO.getInstance();
+        
         String url = javaNetHttpClient.fetchInitialURL(initialUrl);
         System.out.println("===== Initial URL is " + url + " =====");
-        String lastURL = readURL(path, initialUrl);
+        String lastURL = fileIO.readURL(path, initialUrl);
         // URLを書き込む
-        writeURL(url, path, initialUrl);
+        fileIO.writeURL(url, path);
         Integer i = 0;
         while(i<upperLimit && isNotEndPage(url) && isPriviousFetchURL(url, lastURL)) {
             // nextUrl
@@ -72,58 +69,6 @@ public class Ameba {
             }
         }
         return str;
-    }
-
-    /**
-     * 前回読んだurlを読み込む
-     * @param url
-     * @return
-     */
-    private String readURL(String path, String init) {
-        File file = new File(path + "/" + getFineName(init));
-        String lastURL = "";
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            lastURL = br.readLine();
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            // ファイルがない場合は、空文字列を返却する。
-            lastURL = "";
-        } catch (IOException e) {
-            e.printStackTrace();
-            // ファイルがない場合は、空文字列を返却する。
-            lastURL = "";
-        }
-        System.out.println("===== Last URL is " + lastURL + " =====");
-        return lastURL;
-    }
-
-    /**
-     * urlを書き込む
-     * @param url
-     * @return
-     */
-    private void writeURL(String url, String path, String init) {
-        File file = new File(path + "/" + getFineName(init));
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-            pw.println(url);
-            pw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            // 失敗したらなにもしない
-        }
-        System.out.println("===== " + url + " is writed!! =====");
-    }
-
-    private String getFineName(String url) {
-        if(url.endsWith("html") || url.endsWith("/")) {
-            return url.replaceAll("^.*/([^/]+)/[^/]*$", "$1");
-        } else {
-            return url.replaceAll("^.*/([^/]+)$", "$1");
-        }
     }
 
 }

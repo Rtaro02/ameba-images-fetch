@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import main.common.ameba.Ameba;
+import main.common.instagram.Instagram;
 import main.common.util.CheckAmebaBlog;
 import main.common.util.FetchAndSaveImage;
 import main.constants.BlogEnum;
@@ -31,6 +32,10 @@ public class SaveImages {
         if(checkAmebaBlog.isAmebaBlog(initialUrl).equals(BlogEnum.AMEBA)) {
             // amebaの場合実行
             Ameba.getInstance().amebaExecute(initialUrl, path, upperLimit);            
+        }
+        if(checkAmebaBlog.isAmebaBlog(initialUrl).equals(BlogEnum.INSTAGRAM)) {
+            // instagramの場合実行
+            Instagram.getInstance().instagramExecute(initialUrl, path, upperLimit);            
         }
     }
 }
